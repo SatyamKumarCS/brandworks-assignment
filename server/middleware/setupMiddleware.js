@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 
 const setupMiddleware = (app) => {
   app.use(cors({
-    origin: '*', 
+    origin: process.env.CLIENT_URL || 'http://localhost:5173', 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
   }));
