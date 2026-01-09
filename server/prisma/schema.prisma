@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  name         String
+  email        String    @unique
+  phone        String?
+  passwordHash String?   @map("password_hash")
+  role         String    @default("customer")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  vehicles     Vehicle[]
+  drivers      Driver[]
+
+  @@map("users")
+}
+
+model Location {
+  id             Int              @id @default(autoincrement())
+  name           String
+  address        String?
+  city           String?
+  state          String?
+  totalSlots     Int              @default(100) @map("total_slots")
+  availableSlots Int              @default(100) @map("available_slots")
+  hourlyRate     Decimal          @default(50.00) @map("hourly_rate") @db.Decimal(10, 2)
+  status         String           @default("active")
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+  drivers        Driver[]
+  parkingSessions ParkingSession[]
+
+  @@map("locations")
+}
+
+model Vehicle {
+  id          Int      @id @default(autoincrement())
+  userId      Int?     @map("user_id")
+  name        String
+  plateNumber String   @map("plate_number")
+  type        String   @default("car")
+  ownerName   String?  @map("owner_name")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("vehicles")
+}
+
+model Driver {
+  id              Int              @id @default(autoincrement())
+  userId          Int?             @map("user_id")
+  name            String
+  email           String?
+  phone           String
+  licenseNumber   String?          @unique @map("license_number")
+  licensePhotoUrl String?          @map("license_photo_url")
+  status          String           @default("available")
+  siteId          Int?             @map("site_id")
+  joinedDate      DateTime         @default(now()) @map("joined_date")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+  user            User?            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  site            Location?        @relation(fields: [siteId], references: [id])
+  parkingSessions ParkingSession[]
+
+  @@map("drivers")
+}
+
+model PendingDriverRequest {
+  id          Int      @id @default(autoincrement())
+  name        String
+  phone       String
+  license     String?
+  site        String?
+  submittedBy String?  @map("submitted_by")
+  submittedOn DateTime @default(now()) @map("submitted_on")
+  status      String   @default("pending")
+  details     Json?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("pending_driver_requests")
+}
+
+model ParkingSession {
+  id              Int       @id @default(autoincrement())
+  ticketId        String?   @unique @map("ticket_id")
+  vehicleName     String?   @map("vehicle_name")
+  vehiclePlate    String?   @map("vehicle_plate")
+  customerName    String?   @map("customer_name")
+  driverId        Int?      @map("driver_id")
+  driverName      String?   @map("driver_name")
+  locationId      Int?      @map("location_id")
+  locationName    String?   @map("location_name")
+  locationAddress String?   @map("location_address")
+  parkingSpot     String?   @map("parking_spot")
+  status          String    @default("pending")
+  entryTime       DateTime  @default(now()) @map("entry_time")
+  exitTime        DateTime? @map("exit_time")
+  duration        String?
+  amount          Decimal?  @db.Decimal(10, 2)
+  paymentStatus   String    @default("pending") @map("payment_status")
+  paymentMethod   String?   @map("payment_method")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  driver          Driver?   @relation(fields: [driverId], references: [id])
+  location        Location? @relation(fields: [locationId], references: [id])
+
+  @@map("parking_sessions")
+}
