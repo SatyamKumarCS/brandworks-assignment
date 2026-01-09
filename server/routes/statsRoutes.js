@@ -1,9 +1,9 @@
-import { Router } from 'express';
-import { getManagerStats, getAdminStats } from '../controllers/statsController.js';
+const { Router } = require('express');
+const { getManagerStats, getAdminStats } = require('../controllers/statsController');
 
 const router = Router();
 
 router.get('/manager', getManagerStats);
 router.get('/admin', getAdminStats);
 
-export default router;
+module.exports = router;

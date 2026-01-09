@@ -1,4 +1,4 @@
-import prisma from '../config/prisma.js';
+const prisma = require('../config/prisma');
 
 const mockDrivers = [
   { id: 1, name: 'Rahul Kumar', email: 'rahul@valet.com', phone: '+91 9876543210', status: 'available', license: 'DL-MH-04-2022-12345', joined: '2025-01-10', site: 'Phoenix Mall - Lower Parel' },
@@ -18,7 +18,7 @@ let mockPendingDrivers = [
   }
 ];
 
-export const getAllDrivers = async (req, res) => {
+const getAllDrivers = async (req, res) => {
   try {
     const drivers = await prisma.driver.findMany({
       orderBy: { createdAt: 'desc' }
@@ -44,7 +44,7 @@ export const getAllDrivers = async (req, res) => {
   }
 };
 
-export const getPendingDrivers = async (req, res) => {
+const getPendingDrivers = async (req, res) => {
   try {
     const pending = await prisma.pendingDriverRequest.findMany({
       where: { status: 'pending' },
@@ -61,7 +61,7 @@ export const getPendingDrivers = async (req, res) => {
   }
 };
 
-export const createDriverRequest = async (req, res) => {
+const createDriverRequest = async (req, res) => {
   const { name, phone, license, site, details } = req.body;
   
   try {
@@ -84,7 +84,7 @@ export const createDriverRequest = async (req, res) => {
   }
 };
 
-export const approveDriver = async (req, res) => {
+const approveDriver = async (req, res) => {
   const { id } = req.params;
   
   try {
@@ -117,7 +117,7 @@ export const approveDriver = async (req, res) => {
   }
 };
 
-export const rejectDriver = async (req, res) => {
+const rejectDriver = async (req, res) => {
   const { id } = req.params;
   
   try {
@@ -133,7 +133,7 @@ export const rejectDriver = async (req, res) => {
   }
 };
 
-export const createDriver = async (req, res) => {
+const createDriver = async (req, res) => {
   const { name, phone, email } = req.body;
   
   try {
@@ -163,4 +163,13 @@ export const createDriver = async (req, res) => {
     console.error('Create driver error:', err);
     res.status(500).json({ error: err.message });
   }
+};
+
+module.exports = {
+  getAllDrivers,
+  getPendingDrivers,
+  createDriverRequest,
+  approveDriver,
+  rejectDriver,
+  createDriver
 };

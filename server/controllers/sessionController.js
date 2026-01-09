@@ -1,4 +1,4 @@
-import prisma from '../config/prisma.js';
+const prisma = require('../config/prisma');
 
 const mockSessions = [
   {
@@ -68,7 +68,7 @@ const mockHistory = [
   }
 ];
 
-export const getAllSessions = async (req, res) => {
+const getAllSessions = async (req, res) => {
   try {
     const sessions = await prisma.parkingSession.findMany({
       orderBy: { entryTime: 'desc' }
@@ -84,7 +84,7 @@ export const getAllSessions = async (req, res) => {
   }
 };
 
-export const getActiveSessions = async (req, res) => {
+const getActiveSessions = async (req, res) => {
   try {
     const sessions = await prisma.parkingSession.findMany({
       where: {
@@ -105,7 +105,7 @@ export const getActiveSessions = async (req, res) => {
   }
 };
 
-export const getParkingHistory = async (req, res) => {
+const getParkingHistory = async (req, res) => {
   try {
     const sessions = await prisma.parkingSession.findMany({
       where: { status: 'completed' },
@@ -122,7 +122,7 @@ export const getParkingHistory = async (req, res) => {
   }
 };
 
-export const getActiveTicket = async (req, res) => {
+const getActiveTicket = async (req, res) => {
   try {
     const session = await prisma.parkingSession.findFirst({
       where: {
@@ -168,7 +168,7 @@ export const getActiveTicket = async (req, res) => {
   }
 };
 
-export const createSession = async (req, res) => {
+const createSession = async (req, res) => {
   const { plateNumber, carModel, location, locationAddress, customerName, vehicleId } = req.body;
   const ticketId = 'PRK-' + Math.floor(Math.random() * 90000 + 10000);
 
@@ -193,7 +193,7 @@ export const createSession = async (req, res) => {
   }
 };
 
-export const updateSessionStatus = async (req, res) => {
+const updateSessionStatus = async (req, res) => {
   const { id } = req.params;
   const { status, valetId, valetName, parkingSpot } = req.body;
 
@@ -215,7 +215,7 @@ export const updateSessionStatus = async (req, res) => {
   }
 };
 
-export const completeSession = async (req, res) => {
+const completeSession = async (req, res) => {
   const { id } = req.params;
   const { amount, paymentMethod } = req.body;
 
@@ -236,4 +236,14 @@ export const completeSession = async (req, res) => {
     console.error('Complete session error:', err);
     res.status(500).json({ error: err.message });
   }
+};
+
+module.exports = {
+  getAllSessions,
+  getActiveSessions,
+  getParkingHistory,
+  getActiveTicket,
+  createSession,
+  updateSessionStatus,
+  completeSession
 };

@@ -1,12 +1,12 @@
-import { Router } from 'express';
-import {
+const { Router } = require('express');
+const {
   getAllDrivers,
   getPendingDrivers,
   createDriverRequest,
   approveDriver,
   rejectDriver,
   createDriver
-} from '../controllers/driverController.js';
+} = require('../controllers/driverController');
 
 const router = Router();
 
@@ -17,4 +17,4 @@ router.post('/approve/:id', approveDriver);
 router.delete('/reject/:id', rejectDriver);
 router.post('/', createDriver);
 
-export default router;
+module.exports = router;

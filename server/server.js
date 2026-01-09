@@ -1,13 +1,11 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import setupMiddleware from './middleware/setupMiddleware.js';
-import sessionRoutes from './routes/sessionRoutes.js';
-import driverRoutes from './routes/driverRoutes.js';
-import vehicleRoutes from './routes/vehicleRoutes.js';
-import locationRoutes from './routes/locationRoutes.js';
-import statsRoutes from './routes/statsRoutes.js';
-
-dotenv.config();
+const express = require('express');
+require('dotenv').config();
+const setupMiddleware = require('./middleware/setupMiddleware');
+const sessionRoutes = require('./routes/sessionRoutes');
+const driverRoutes = require('./routes/driverRoutes');
+const vehicleRoutes = require('./routes/vehicleRoutes');
+const locationRoutes = require('./routes/locationRoutes');
+const statsRoutes = require('./routes/statsRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5001;

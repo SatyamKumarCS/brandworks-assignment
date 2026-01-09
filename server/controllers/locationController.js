@@ -1,4 +1,4 @@
-import prisma from '../config/prisma.js';
+const prisma = require('../config/prisma');
 
 const mockLocations = [
   { id: 1, name: 'Phoenix Mall', address: 'Lower Parel', city: 'Mumbai' },
@@ -7,7 +7,7 @@ const mockLocations = [
   { id: 4, name: 'City Center Mall', address: 'Bandra East', city: 'Mumbai' },
 ];
 
-export const getAllLocations = async (req, res) => {
+const getAllLocations = async (req, res) => {
   try {
     const locations = await prisma.location.findMany({
       orderBy: { name: 'asc' }
@@ -23,7 +23,7 @@ export const getAllLocations = async (req, res) => {
   }
 };
 
-export const getLocationById = async (req, res) => {
+const getLocationById = async (req, res) => {
   const { id } = req.params;
   
   try {
@@ -47,7 +47,7 @@ export const getLocationById = async (req, res) => {
   }
 };
 
-export const createLocation = async (req, res) => {
+const createLocation = async (req, res) => {
   const { name, address, city, state, totalSlots, hourlyRate } = req.body;
   
   try {
@@ -70,7 +70,7 @@ export const createLocation = async (req, res) => {
   }
 };
 
-export const updateLocation = async (req, res) => {
+const updateLocation = async (req, res) => {
   const { id } = req.params;
   const { name, address, city, state, totalSlots, availableSlots, hourlyRate, status } = req.body;
   
@@ -96,7 +96,7 @@ export const updateLocation = async (req, res) => {
   }
 };
 
-export const deleteLocation = async (req, res) => {
+const deleteLocation = async (req, res) => {
   const { id } = req.params;
   
   try {
@@ -109,4 +109,12 @@ export const deleteLocation = async (req, res) => {
     console.error('Delete location error:', err);
     res.status(500).json({ error: err.message });
   }
+};
+
+module.exports = {
+  getAllLocations,
+  getLocationById,
+  createLocation,
+  updateLocation,
+  deleteLocation
 };

@@ -1,5 +1,5 @@
-import { Router } from 'express';
-import {
+const { Router } = require('express');
+const {
   getAllSessions,
   getActiveSessions,
   getParkingHistory,
@@ -7,7 +7,7 @@ import {
   createSession,
   updateSessionStatus,
   completeSession
-} from '../controllers/sessionController.js';
+} = require('../controllers/sessionController');
 
 const router = Router();
 
@@ -19,4 +19,4 @@ router.post('/', createSession);
 router.patch('/:id/status', updateSessionStatus);
 router.patch('/:id/complete', completeSession);
 
-export default router;
+module.exports = router;

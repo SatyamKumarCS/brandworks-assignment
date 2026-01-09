@@ -1,6 +1,6 @@
-import prisma from '../config/prisma.js';
+const prisma = require('../config/prisma');
 
-export const getManagerStats = async (req, res) => {
+const getManagerStats = async (req, res) => {
   try {
     const activeCars = await prisma.parkingSession.count({
       where: { status: 'parked' }
@@ -44,7 +44,7 @@ export const getManagerStats = async (req, res) => {
   }
 };
 
-export const getAdminStats = async (req, res) => {
+const getAdminStats = async (req, res) => {
   try {
     const todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
@@ -92,3 +92,5 @@ export const getAdminStats = async (req, res) => {
     });
   }
 };
+
+module.exports = { getManagerStats, getAdminStats };

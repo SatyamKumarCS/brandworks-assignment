@@ -1,11 +1,11 @@
-import prisma from '../config/prisma.js';
+const prisma = require('../config/prisma');
 
 const mockVehicles = [
   { id: 1, name: 'Toyota Camry', plateNumber: 'MH 12 AB 1234', type: 'car', userId: 1 },
   { id: 2, name: 'Honda Civic', plateNumber: 'MH 14 CD 5678', type: 'car', userId: 1 },
 ];
 
-export const getAllVehicles = async (req, res) => {
+const getAllVehicles = async (req, res) => {
   try {
     const vehicles = await prisma.vehicle.findMany({
       orderBy: { createdAt: 'desc' }
@@ -21,7 +21,7 @@ export const getAllVehicles = async (req, res) => {
   }
 };
 
-export const getUserVehicles = async (req, res) => {
+const getUserVehicles = async (req, res) => {
   const { userId } = req.params;
   try {
     const userIdInt = parseInt(userId) || 1;
@@ -40,7 +40,7 @@ export const getUserVehicles = async (req, res) => {
   }
 };
 
-export const createVehicle = async (req, res) => {
+const createVehicle = async (req, res) => {
   const { name, plateNumber, type, userId, ownerName } = req.body;
   
   try {
@@ -62,7 +62,7 @@ export const createVehicle = async (req, res) => {
   }
 };
 
-export const updateVehicle = async (req, res) => {
+const updateVehicle = async (req, res) => {
   const { id } = req.params;
   const { name, plateNumber, type } = req.body;
   
@@ -79,7 +79,7 @@ export const updateVehicle = async (req, res) => {
   }
 };
 
-export const deleteVehicle = async (req, res) => {
+const deleteVehicle = async (req, res) => {
   const { id } = req.params;
   
   try {
@@ -92,4 +92,12 @@ export const deleteVehicle = async (req, res) => {
     console.error('Delete vehicle error:', err);
     res.status(500).json({ error: err.message });
   }
+};
+
+module.exports = {
+  getAllVehicles,
+  getUserVehicles,
+  createVehicle,
+  updateVehicle,
+  deleteVehicle
 };
